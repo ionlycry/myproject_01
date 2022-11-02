@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      #angel {
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <img src="./lib/angel.gif" alt="" id="angel" />
+    <script src="./lib/jquery.js"></script>
+    <script>
+      $(function () {
+        let timer = null; //节流阀
+        $(document).on("mousemove", function (e) {
+          if (timer === null) {
+            timer = setTimeout(function () {
+              $("#angel")
+                .css("left", e.pageX + "px")
+                .css("top", e.pageY + "px");
+              console.log("1");
+              timer = null;
+            }, 25);
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

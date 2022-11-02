@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
+    <style>
+      .panel-body div {
+        line-height: 35px;
+      }
+      .panel-body button {
+        margin-top: 15px;
+      }
+    </style>
+  </head>
+  <body style="padding: 15px">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">发表评论</h3>
+      </div>
+      <form class="panel-body" id="formAddCmt">
+        <div>评论人：</div>
+        <input
+          type="text"
+          name="username"
+          id="username"
+          class="form-control"
+          value=""
+          required="required"
+          placeholder="请输入评论人"
+        />
+        <div>评论内容：</div>
+
+        <textarea
+          name="content"
+          id="content"
+          class="form-control"
+          required="required"
+          placeholder="请输入评论内容（最多120字）"
+        ></textarea>
+
+        <button type="submit" class="btn btn-primary" id="btnAddcontent">
+          发表评论
+        </button>
+      </form>
+    </div>
+
+    <ul class="list-group" id="cmtList"></ul>
+
+    <script src="./jquery.js"></script>
+    <script src="../myAjax.js"></script>
+    <script src="./cmt.js"></script>
+  </body>
+</html>

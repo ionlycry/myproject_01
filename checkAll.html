@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      table {
+        border-collapse: collapse;
+        border: 1px solid #aaa;
+      }
+      td {
+        padding: 10px 20px;
+      }
+      th {
+        background-color: rgb(56, 56, 233);
+        color: aliceblue;
+        padding: 10px 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" id="checkAll" /></th>
+          <th>商品名称</th>
+          <th>商品价格</th>
+          <th>数量</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>小米手机</td>
+          <td>￥12321</td>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>小米电饭煲</td>
+          <td>￥12321</td>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td>小米电话手表</td>
+          <td>￥123</td>
+          <td>3</td>
+        </tr>
+      </tbody>
+    </table>
+    <script>
+      //获取th中的checkbox的值
+      //为true,td的中的checkbox值全部选中
+      const ck = document.querySelector("th input[type=checkbox]");
+      const ckList = document.querySelectorAll("td input[type=checkbox]");
+      let count = 0;
+      ck.addEventListener("click", function () {
+        for (let i = 0; i < ckList.length; i++) {
+          ckList[i].checked = ck.checked;
+        }
+      });
+
+      for (let i = 0; i < ckList.length; i++) {
+        ckList[i].addEventListener("click", function () {
+          ck.checked =
+            document.querySelectorAll("td input:checked").length ===
+            ckList.length;
+        });
+      }
+    </script>
+  </body>
+</html>

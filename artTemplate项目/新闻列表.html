@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./assets/news.css" />
+    <script src="./jquery.js"></script>
+    <script src="./template-web.js"></script>
+  </head>
+  <body>
+    <div id="news-list"></div>
+    <!-- <script type="text/html" id="news">
+      {{each data}}
+      <div class="news-item">
+        <img
+          class="thumb"
+          src="http://www.liulongbin.top:3006{{$value.img}}"
+          alt=""
+        />
+        <div class="right-box">
+          <h1 class="title">{{$value.title}}</h1>
+
+          <div class="tags">
+            {{each $value.tags}}
+            <span>{{$value}}</span>
+            {{/each}}
+          </div>
+          <div class="footer">
+            <div>
+              <span>{{$value.source}}</span>&nbsp;&nbsp;
+              <span>{{$value.time|timeFormate}}</span>
+            </div>
+            <span>评论数：{{$value.cmtcount}}</span>
+          </div>
+        </div>
+      </div>
+
+      {{/each}}
+    </script> -->
+    <script type="text/html" id="news">
+      <div class="news-item">
+        <img class="thumb" src="http://www.liulongbin.top:3006{{img}}" alt="" />
+        <div class="right-box">
+          <h1 class="title">{{title}}</h1>
+
+          <div class="tags">
+            <span>{{tags}}</span>
+          </div>
+          <div class="footer">
+            <div>
+              <span>{{source}}</span>&nbsp;&nbsp;
+              <span>{{time}}</span>
+            </div>
+            <span>评论数：{{cmtcount}}</span>
+          </div>
+        </div>
+      </div>
+    </script>
+    <script>
+      // 获取数据
+      function getMydata() {
+        $.get("http://www.liulongbin.top:3006/api/news", function (res) {
+          if (res.status !== 200) {
+            return alert("获取新闻列表失败");
+          }
+
+          //   tag标签,string转化为数组
+          // 循环遍历res.data.tags
+
+          for (let i = 0; i < res.data.length; i++) {
+            res.data[i].tags = res.data[i].tags.split(",");
+          }
+          console.log(res.data);
+          function addZero(n) {
+            if (n <= 10) {
+              n = "0" + n;
+            }
+            return n;
+          }
+          template.defaults.imports.timeFormate = function (time) {
+            const mytime = new Date(time);
+            const y = mytime.getFullYear();
+            const mo = mytime.getMonth() + 1;
+            const d = mytime.getDate();
+            const h = addZero(mytime.getHours());
+            const m = addZero(mytime.getMinutes());
+            const s = addZero(mytime.getSeconds());
+            return `${y}年${mo}月${d}日 ${h}:${m}:${s}`;
+          };
+          const str = mytemp("#news", res.data[0]);
+          $("#news-list").html(str);
+        });
+      }
+      getMydata();
+    </script>
+
+    <script>
+      function mytemp(id, data) {
+        // 获取id内的str
+        let str = document.querySelector(id).innerHTML;
+        const reg = /{{\s*([a-zA-Z]+)\s*}}/;
+        let sucdata = null;
+        while ((sucdata = reg.exec(str))) {
+          // 循环匹配替换data
+          str = str.replace(sucdata[0], data[sucdata[1]]);
+        }
+
+        // 返回替换后的str字符创
+        return str;
+      }
+    </script>
+  </body>
+</html>

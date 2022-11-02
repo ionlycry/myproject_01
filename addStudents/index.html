@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <h2>新增学员</h2>
+    <form class="info" autocomplete="off">
+      <div>
+        <label for="uname">姓名:</label
+        ><input type="text" id="uname" name="uname" />
+      </div>
+      <div>
+        <label for="uage">年龄:</label
+        ><input type="text" name="uage" id="uage" />
+      </div>
+      <div>
+        <label for="sex">性别:</label>
+        <select id="sex" name="sex">
+          <option value="男">男</option>
+          <option value="女">女</option>
+        </select>
+      </div>
+      <div>
+        <label for="money">薪资:</label
+        ><input type="text" name="money" id="money" />
+      </div>
+      <div>
+        <label for="city">就业城市:</label>
+        <select id="city" name="city">
+          <option value="北京">北京</option>
+          <option value="上海">上海</option>
+          <option value="福建">福建</option>
+          <option value="厦门">厦门</option>
+          <option value="杭州">杭州</option>
+          <option value="武汉">武汉</option>
+        </select>
+      </div>
+      <button id="getAllBtn">录入</button>
+    </form>
+    <h2>就业榜</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>学号</th>
+          <th>姓名</th>
+          <th>年龄</th>
+          <th>性别</th>
+          <th>薪资</th>
+          <th>就业城市</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody class="tableBody"></tbody>
+    </table>
+    <script>
+      //获取元素
+      const uname = document.querySelector("#uname");
+      const uage = document.querySelector("#uage");
+      const sex = document.querySelector("#sex");
+      const money = document.querySelector("#money");
+      const city = document.querySelector("#city");
+      const tableBody = document.querySelector(".tableBody");
+      const item = document.querySelectorAll("[name]");
+      // 数据：数组对象
+      const arr = [];
+      const info = document.querySelector(".info");
+      info.addEventListener("submit", function (e) {
+        e.preventDefault();
+
+        //进行表单数据验证
+        // 获取所有带有name属性的表签
+        for (let i = 0; i < item.length; i++) {
+          if (item[i].value === "") {
+            return alert("数值不能为空");
+          }
+        }
+        const obj = {
+          stuId: arr.length + 1,
+          uname: uname.value,
+          age: uage.value,
+          sex: sex.value,
+          money: money.value,
+          city: city.value,
+        };
+        arr.push(obj);
+        render();
+        //清空表单
+        this.reset();
+      });
+      // 事件委托
+      tableBody.addEventListener("click", function (e) {
+        if (e.target.tagName === "A") {
+          const id = e.target.dataset.id;
+          arr.splice(id, 1);
+          render();
+        }
+      });
+      function render() {
+        //清空table,重新渲染
+        tableBody.innerHTML = "";
+        for (let i = 0; i < arr.length; i++) {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${arr[i].stuId}</td>
+            <td>${arr[i].uname}</td>
+            <td>${arr[i].age}</td>
+            <td>${arr[i].sex}</td>
+            <td>${arr[i].money}</td>
+            <td>${arr[i].city}</td>
+            <td><a href="javascript:;" data-id=${i}>删除</a></td>
+          `;
+          tableBody.appendChild(tr);
+        }
+      }
+    </script>
+  </body>
+</html>

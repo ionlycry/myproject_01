@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body style="padding: 15px">
+    <!-- 顶部panel部分 -->
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        <h3 class="panel-title">添加新图书</h3>
+      </div>
+      <div class="panel-body form-inline">
+        <div class="input-group">
+          <div class="input-group-addon">书名</div>
+          <input
+            type="text"
+            class="form-control"
+            id="iptBookname"
+            placeholder="请输入书名"
+          />
+        </div>
+        <div class="input-group">
+          <div class="input-group-addon">作者</div>
+          <input
+            type="text"
+            class="form-control"
+            id="iptAuthor"
+            placeholder="请输入作者"
+          />
+        </div>
+        <div class="input-group">
+          <div class="input-group-addon">出版社</div>
+          <input
+            type="text"
+            class="form-control"
+            id="iptPublisher"
+            placeholder="请输入出版社"
+          />
+        </div>
+        <button id="btnAddBook" class="btn btn-primary">添加</button>
+      </div>
+
+      <!-- 表格部分 -->
+
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>书名</th>
+            <th>作者</th>
+            <th>出版社</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="bookBody">
+          <!-- <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><a href="javascript:;">删除</a></td>
+          </tr> -->
+        </tbody>
+      </table>
+    </div>
+
+    <!-- jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) -->
+    <script src="./jquery.js"></script>
+    <!-- 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 -->
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"
+      integrity="sha384-aJ21OjlMXNL5UyIl/XNwTMqvzeRMZH2w8c5cRVpzpU8Y5bApTppSuUkhZXN0VxHd"
+      crossorigin="anonymous"
+    ></script>
+
+    <script>
+      // 渲染列表函数
+      function getBooksList() {
+        // ajax获取数据
+        $.get("http://www.liulongbin.top:3006/api/getbooks", function (res) {
+          if (res.status !== 200) {
+            return alert("获取图书列表失败");
+          }
+          var rows = [];
+          $.each(res.data, function (i, item) {
+            rows.push(`
+            <tr>
+              <td>${item.id}</td>
+              <td>${item.bookname}</td>
+              <td>${item.author}</td>
+              <td>${item.publisher}</td>
+              <td><a href="javascript:;" data-id=${item.id} class='del'>删除</a></td>
+            </tr> `);
+          });
+          // 清空,渲染页面
+          $("#bookBody").empty().append(rows.join(""));
+        });
+      }
+      getBooksList();
+
+      // 删除图书列表
+      // 事件委托
+      $("#bookBody").on("click", ".del", function () {
+        var id = $(this).attr("data-id");
+        $.get(
+          "http://www.liulongbin.top:3006/api/delbook",
+          { id: id },
+          function (res) {
+            if (res.status !== 200) {
+              return alert(res.msg);
+            }
+            //删除成功，刷新列表
+            getBooksList();
+          }
+        );
+      });
+
+      //添加图书
+      $("#btnAddBook").on("click", function () {
+        //判断文本框的值是否符合规范
+        var bookname = $("#iptBookname").val().trim();
+        var author = $("#iptAuthor").val().trim();
+        var publisher = $("#iptPublisher").val().trim();
+
+        if (
+          bookname.length <= 0 ||
+          author.length <= 0 ||
+          publisher.length <= 0
+        ) {
+          return alert("请填写完整的图书管理信息");
+        }
+
+        // ajax,post提交，重新渲染列表
+        $.post(
+          "http://www.liulongbin.top:3006/api/addbook",
+          { bookname: bookname, author: author, publisher: publisher },
+          function (res) {
+            // console.log(res.status);
+            if (res.status !== 201) return alert("添加失败");
+            getBooksList();
+            $("#iptBookname").val("");
+            $("#iptAuthor").val("");
+            $("#iptPublisher").val("");
+          }
+        );
+      });
+    </script>
+  </body>
+</html>

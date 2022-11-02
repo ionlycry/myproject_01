@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+  <head lang="en">
+    <meta charset="UTF-8" />
+    <title></title>
+    <style type="text/css">
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      ul {
+        list-style: none;
+      }
+
+      .wrapper {
+        width: 1000px;
+        height: 475px;
+        margin: 0 auto;
+        margin-top: 100px;
+      }
+
+      .tab {
+        border: 1px solid #ddd;
+        border-bottom: 0;
+        height: 36px;
+        width: 320px;
+        position: relative;
+      }
+
+      .tab li {
+        position: relative;
+        float: left;
+        width: 80px;
+        height: 34px;
+        line-height: 34px;
+        text-align: center;
+        cursor: pointer;
+      }
+      .tab li a {
+        color: #333;
+        text-decoration: none;
+      }
+      .tab .border-move {
+        height: 3px;
+        width: 70px;
+        background-color: orangered;
+        position: absolute;
+        left: 5px;
+        top: 33px;
+        transition: all 0.2s;
+      }
+      .tab span {
+        position: absolute;
+        right: 0;
+        top: 10px;
+        background: #ddd;
+        width: 1px;
+        height: 14px;
+        overflow: hidden;
+      }
+
+      .products {
+        width: 1002px;
+        border: 1px solid #ddd;
+        height: 476px;
+      }
+
+      .products .main {
+        float: left;
+        display: none;
+      }
+
+      .products .main.active {
+        display: block;
+      }
+
+      .tab li.active {
+        border-bottom: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="wrapper">
+      <ul class="tab">
+        <li class="tab-item active">
+          <a href="javascript:;" data-id="0">国际大牌</a><span>◆</span>
+        </li>
+        <li class="tab-item">
+          <a href="javascript:;" data-id="1">国妆名牌</a><span>◆</span>
+        </li>
+        <li class="tab-item">
+          <a href="javascript:;" data-id="2">清洁用品</a><span>◆</span>
+        </li>
+        <li class="tab-item">
+          <a href="javascript:;" data-id="3">男士精品</a>
+        </li>
+        <div class="border-move"></div>
+      </ul>
+      <div class="products">
+        <div class="main active">
+          <a href="###"><img src="imgs/guojidapai.jpg" alt="" /></a>
+        </div>
+        <div class="main">
+          <a href="###"><img src="imgs/guozhuangmingpin.jpg" alt="" /></a>
+        </div>
+        <div class="main">
+          <a href="###"><img src="imgs/qingjieyongpin.jpg" alt="" /></a>
+        </div>
+        <div class="main">
+          <a href="###"><img src="imgs/nanshijingpin.jpg" alt="" /></a>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // const listLi = document.querySelectorAll(".tab li");
+      // for (let i = 0; i < listLi.length; i++) {
+      //   listLi[i].addEventListener("mouseenter", function () {
+      //     document.querySelector(".tab .active").classList.remove("active");
+      //     this.classList.add("active");
+      //     document
+      //       .querySelector(".products .main.active")
+      //       .classList.remove("active");
+      //     document
+      //       .querySelector(`.products .main:nth-child(${i + 1})`)
+      //       .classList.add("active");
+      //   });
+      // }
+
+      //事件委托版本
+      const tab = document.querySelector(".tab");
+      tab.addEventListener("click", function (e) {
+        if (e.target.tagName === "A") {
+          const id = +e.target.dataset.id; //注意取的是字符串要转化
+          const targetLeft = e.target.parentElement.offsetLeft;
+          document.querySelector(".tab .active").classList.remove("active");
+          e.target.parentElement.classList.add("active");
+          document
+            .querySelector(".products .main.active")
+            .classList.remove("active");
+
+          document
+            .querySelector(`.products .main:nth-child(${id + 1})`)
+            .classList.add("active");
+          document.querySelector(
+            ".border-move"
+          ).style.transform = `translateX(${targetLeft}px)`;
+        }
+      });
+    </script>
+  </body>
+</html>

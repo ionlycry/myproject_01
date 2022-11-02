@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>按回车发送消息</title>
+    <link rel="stylesheet" href="../base.css" />
+    <style>
+      .wrapper {
+        display: flex;
+        width: 580px;
+        justify-content: space-between;
+        margin-top: 20px;
+      }
+      .wrapper .portrait {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        background: url(./images/portrait.jpg) no-repeat center center;
+        background-size: contain;
+      }
+      .wrapper textarea {
+        background-color: rgb(243, 243, 243);
+        border: 0px;
+        resize: none;
+        width: 400px;
+        height: 50px;
+        border: 1px solid #eee;
+        border-radius: 3px;
+        padding: 5px;
+        outline: none;
+        color: rgb(129, 129, 129);
+        transition: all 0.2s;
+      }
+      .wrapper textarea::-webkit-input-placeholder {
+        color: #ccc;
+      }
+      .wrapper textarea:focus {
+        height: 80px;
+        transition: all 0.2s;
+        border: 1px solid rgb(231, 231, 231);
+        background-color: rgb(255, 255, 255);
+      }
+      .wrapper button {
+        width: 100px;
+        background: linear-gradient(rgb(24, 127, 223), rgb(29, 134, 231));
+        border: 0px;
+        color: rgb(228, 234, 255);
+        border-radius: 3px;
+        align-items: stretch;
+        cursor: pointer;
+      }
+      .wrapper button.disable {
+        background: linear-gradient(rgb(209, 209, 209), rgb(211, 211, 211));
+        color: rgb(175, 175, 175);
+        cursor: auto;
+      }
+      .wrapper-total {
+        width: 580px;
+        padding-right: 120px;
+        text-align: right;
+      }
+
+      .total {
+        color: rgb(179, 179, 179);
+        font-size: 14px;
+        height: 22px;
+        line-height: 22px;
+        opacity: 0;
+        transition: all 0.2s;
+      }
+      .list {
+        margin-top: 20px;
+      }
+      .item {
+        border-bottom: 1px dashed #eee;
+        padding: 5px;
+        margin: 5px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper">
+      <i class="portrait"></i
+      ><textarea id="tx" placeholder="请输入你想说的话..."></textarea
+      ><button id="btnSend">发送</button>
+    </div>
+    <div class="wrapper-total"><span class="total">0/100字</span></div>
+    <div class="list" style="display: none">
+      <!-- <div class="item">
+        <i class="portrait"></i>
+        <div class="info">
+          <p class="name">清风徐来</p>
+          <p class="text">
+            大家辛苦啦，感谢各位大家的努力，能圆满完成课程的学习，未来的成功指日可待
+          </p>
+          <p class="time">2022-10-10 20:23:09</p>
+        </div>
+      </div> -->
+    </div>
+    <script>
+      //获取textarea
+      //设置input事件监听，读取tx的value.length
+      //设置total的显示内容
+      const tx = document.querySelector("#tx");
+      const num = document.querySelector(".total");
+      const btnSend = document.querySelector("#btnSend");
+      const list = document.querySelector(".list");
+      tx.addEventListener("focus", function () {
+        num.style.opacity = 1;
+      });
+      tx.addEventListener("blur", function () {
+        num.style.opacity = 0;
+      });
+      tx.addEventListener("input", function () {
+        let len = this.value.length;
+        num.innerHTML = `${len}/100字`;
+        btnSend.disabled = "false";
+        btnSend.classList.remove("disable");
+        if (len >= 100) {
+          num.innerHTML = `${len}/你的字数超过100`;
+          btnSend.disabled = "true";
+          btnSend.classList.add("disable");
+        }
+      });
+      tx.addEventListener("keyup", function (e) {
+        if (e.key === "Enter") {
+          if (tx.value.trim()) {
+            list.style.display = "block";
+            list.innerHTML += `
+          <div class="item">
+             <i class="portrait"></i>
+             <div class="info">
+             <p class="name">清风徐来</p>
+             <p class="text">
+                ${tx.value}
+             </p>
+             <p class="time">2022-10-10 20:23:09</p>
+         </div>
+      </div>
+          `;
+          }
+          tx.value = "";
+          num.innerHTML = `0/100字`;
+        }
+      });
+    </script>
+  </body>
+</html>

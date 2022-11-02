@@ -1,0 +1,46 @@
+* {
+  box-sizing: border-box;
+  outline-style: none;
+}
+h2 {
+  text-align: center;
+}
+form {
+  text-align: center;
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px auto;
+}
+label {
+  margin-right: 5px;
+}
+input {
+  width: 80px;
+}
+select {
+  width: 80px;
+  height: 21px;
+}
+button {
+  background: linear-gradient(rgb(11, 66, 160), rgb(5, 49, 124));
+  color: #fff;
+  border: 0px;
+  width: 50px;
+  border-radius: 3px;
+  font-size: 12px;
+  line-height: 12px;
+}
+table {
+  margin: 20px auto;
+  width: 800px;
+  font-size: 14px;
+  text-align: center;
+}
+table th {
+  background-color: rgb(193, 214, 241);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 30px;
+  width: 110px;
+}

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <ul>
+      <li>
+        1
+        <p>我是第一条内容</p>
+      </li>
+      <!-- 这是第2条内容 -->
+      <li>22131231</li>
+      <li>3</li>
+      <li>4</li>
+      <li>5</li>
+    </ul>
+    <script>
+      const ul = document.querySelector("ul");
+      console.log(ul.childNodes);
+      ul.children[0].nextElementSibling.style.color = "blue";
+    </script>
+  </body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <!-- 导入页面的基本样式 -->
+    <link rel="stylesheet" href="./css/search.css" />
+    <!-- 导入 jQuery -->
+    <script src="../lib/jquery.js"></script>
+    <style>
+      #suggestList {
+        border: 1px solid orange;
+        display: none;
+      }
+      #suggestList p {
+        height: 26px;
+        line-height: 26px;
+        margin: 0px;
+        padding: 0 15px;
+      }
+      #suggestList p:hover {
+        background-color: antiquewhite;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Logo -->
+      <img src="./images/taobao_logo.png" alt="" class="logo" />
+
+      <div class="box">
+        <!-- tab 栏 -->
+        <div class="tabs">
+          <div class="tab-active">宝贝</div>
+          <div>店铺</div>
+        </div>
+        <!-- 搜索区域（搜索框和搜索按钮） -->
+        <div class="search-box">
+          <input
+            type="text"
+            class="ipt"
+            placeholder="请输入要搜索的内容"
+            id="ipt"
+          /><button class="btnSearch">搜索</button>
+        </div>
+        <div id="suggestList"></div>
+      </div>
+    </div>
+    <script src="../lib/template-web.js"></script>
+    <script type="text/html" id="kwlist">
+      {{each result}}
+      <p>{{$value[0]}}</p>
+      {{/each}}
+    </script>
+    <script>
+      $(function () {
+        let timeId = null;
+        // 定义缓存
+        let cacheObj = {};
+        $("#ipt").on("keyup", function (e) {
+          clearTimeout(timeId);
+          var keyword = $(this).val().trim();
+          if (keyword.length <= 0) {
+            return $("#suggestList").empty().hide();
+          }
+          // 如果有缓存就取缓存内容
+          if (cacheObj[keyword]) {
+            return renderSuggestList(cacheObj[keyword]);
+          }
+          debounceSearch(keyword);
+        });
+
+        function getSuggestList(kw) {
+          $.ajax({
+            url: `https://suggest.taobao.com/sug?q=${kw}`,
+            dataType: "jsonp",
+            success: function (res) {
+              renderSuggestList(res);
+            },
+          });
+        }
+        // 渲染UI
+        function renderSuggestList(res) {
+          // 如果没有匹配的结果返回空列表，就隐藏
+          if (res.length <= 0) {
+            return $("#suggestList").empty().hide();
+          }
+          var htmlStr = template("kwlist", res);
+          $("#suggestList").html(htmlStr).show();
+
+          // 加入缓冲
+          var k = $("#ipt").val().trim();
+          cacheObj[k] = res;
+        }
+        // 防抖
+        function debounceSearch(kw) {
+          // 开启延时器
+          timeId = setTimeout(function () {
+            getSuggestList(kw);
+          }, 1000);
+        }
+      });
+    </script>
+  </body>
+</html>

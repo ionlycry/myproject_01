@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Document</title>
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .aside {
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: 0;
+        transition: all 0.3s;
+      }
+
+      .item {
+        height: 40px;
+        line-height: 40px;
+        text-align: center;
+        padding: 0 10px;
+        cursor: pointer;
+      }
+      .item a {
+        color: #333;
+        text-decoration: none;
+
+        display: block;
+      }
+      .active {
+        background-color: red;
+      }
+
+      .item:hover a {
+        color: red;
+      }
+      .item.active a {
+        color: #fff;
+      }
+
+      .content {
+        width: 660px;
+        margin: 400px auto;
+      }
+
+      .neirong {
+        height: 300px;
+        margin-bottom: 20px;
+        color: #fff;
+      }
+
+      .content1 {
+        background-color: red;
+      }
+
+      .content2 {
+        background-color: blue;
+      }
+
+      .content3 {
+        background-color: orange;
+      }
+
+      .content4 {
+        background-color: yellowgreen;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="aside">
+      <ul>
+        <li class="item">
+          <a href="javascript:;" data-id="1">男装/女装</a>
+        </li>
+        <li class="item">
+          <a href="javascript:;" data-id="2">儿童服装/游乐园</a>
+        </li>
+        <li class="item">
+          <a href="javascript:;" data-id="3">电子产品</a>
+        </li>
+        <li class="item">
+          <a href="javascript:;" data-id="4">电影/美食</a>
+        </li>
+      </ul>
+      <div class="item">
+        <a href="javascript:;" class="backTop">返回顶部</a>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="neirong content1">男装/女装</div>
+      <div class="neirong content2">儿童服装/游乐园</div>
+      <div class="neirong content3">电子产品</div>
+      <div class="neirong content4">电影/美食</div>
+    </div>
+
+    <script>
+      //显示隐藏，返回顶部
+      (function () {
+        const aside = document.querySelector(".aside");
+        window.addEventListener("scroll", function () {
+          let n = document.documentElement.scrollTop;
+          const top = document.querySelector(".content").offsetTop;
+          aside.style.opacity = n >= top ? 1 : 0;
+        });
+        const backTop = document.querySelector(".backTop");
+        backTop.addEventListener("click", function () {
+          // document.documentElement.scrollTop = 0;
+          window.scrollTo(0, 0);
+        });
+      })();
+
+      //跳转到对应的模块
+      (function () {
+        //aside，排他，对应的选项添加active,事件委托
+        const asideUl = document.querySelector(".aside ul");
+        asideUl.addEventListener("click", function (e) {
+          if (e.target.tagName === "A") {
+            const id = e.target.dataset.id;
+            const hasActiveClass = document.querySelector(".aside .active");
+            if (hasActiveClass) {
+              hasActiveClass.classList.remove("active");
+            }
+
+            e.target.parentElement.classList.add("active");
+            //获取每个对应模块的offsetTop
+            const contentTop = document.querySelector(
+              `.content${id}`
+            ).offsetTop;
+            //跳转：window.scrollTo(x,y)
+            window.scrollTo(0, contentTop); //不带单位
+          }
+        });
+      })();
+
+      //页面滚动，清除active效果
+      (function () {
+        window.addEventListener("scroll", function () {
+          //当页面滚动，清除activ效果
+          // const hasActiveClass = document.querySelector(".aside .active");
+          // if (hasActiveClass) {
+          //   hasActiveClass.classList.remove("active");
+          // }
+          //当scrollTop>=模块offsettop,aside就添加active
+        });
+      })();
+    </script>
+  </body>
+</html>

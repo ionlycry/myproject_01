@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>上传文件</title>
+    <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"
+      integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <input type="file" id="myfile" /><button id="uploadBtn">上传文件</button>
+
+    <div class="progress" style="width: 400px" id="progress">
+      <div class="progress-bar" role="progressbar" style="width: 10%">
+        <span> 10% Complete</span>
+      </div>
+    </div>
+
+    <img src="" alt="" id="img" />
+    <script>
+      document
+        .querySelector("#uploadBtn")
+        .addEventListener("click", function () {
+          // 获取文件
+          const file = document.querySelector("#myfile").files;
+          if (file.length <= 0) {
+            return alert("请选择文件");
+          }
+          const fd = new FormData();
+          fd.append("avatar", file[0]);
+          // 有文件，发起ajax请求
+          const xhr = new XMLHttpRequest();
+          xhr.upload.onprogress = function (e) {
+            if (e.lengthComputable) {
+              let percentComplete = Math.ceil((e.loaded / e.total) * 100);
+              document.querySelector(
+                "#progress .progress-bar"
+              ).style = `width:${percentComplete}%`;
+              document.querySelector(
+                "#progress .progress-bar"
+              ).innerHTML = `<span> ${percentComplete}% Complete</span>`;
+            }
+          };
+          //   监听上传完成事件
+          xhr.upload.onload = function () {
+            document
+              .querySelector("#progress .progress-bar")
+              .classList.add("progress-bar-success");
+          };
+          xhr.open("POST", "http://www.liulongbin.top:3006/api/upload/avatar");
+          xhr.send(fd);
+          xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+              const mydata = JSON.parse(xhr.responseText);
+              if (mydata.status === 200) {
+                alert("上传成功");
+                document.querySelector(
+                  "#img"
+                ).src = `http://www.liulongbin.top:3006${mydata.url}`;
+              } else {
+                console.log(mydata.message);
+              }
+            }
+          };
+        });
+    </script>
+  </body>
+</html>
