@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      .filter a:active,
+      .filter a:focus {
+        background-color: #05943c;
+        color: #fff;
+      }
+      .list {
+        display: flex;
+        flex-wrap: wrap;
+        align-content: flex-start;
+        width: 880px;
+      }
+      .list .item {
+        width: 200px;
+        margin-right: 20px;
+      }
+      .list .item img {
+        width: 200px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="filter">
+      <a href="javascript:;" data-index="1">0-100</a>
+      <a href="javascript:;" data-index="2">200-300</a>
+      <a href="javascript:;" data-index="3">300以上</a>
+      <a href="javascript:;">全部区间</a>
+    </div>
+    <div class="list">
+      <!-- <div class="item">
+          <img src="" alt="" />
+          <p class="title"></p>
+          <p class="price"></p>
+        </div> -->
+    </div>
+  </body>
+  <script>
+    const goodsList = [
+      {
+        id: "40002",
+        name: "商品标题商品标题商品标题1",
+        price: "89.00",
+        picture: "./uploads/clothes_goods_1.jpg",
+      },
+      {
+        id: "40003",
+        name: "商品标题商品标题商品标题2",
+        price: "283.00",
+        picture: "./uploads/clothes_goods_2.jpg",
+      },
+      {
+        id: "40004",
+        name: "商品标题商品标题商品标题3",
+        price: "84.00",
+        picture: "./uploads/clothes_goods_3.jpg",
+      },
+      {
+        id: "40005",
+        name: "商品标题商品标题商品标题4",
+        price: "215.00",
+        picture: "./uploads/clothes_goods_4.jpg",
+      },
+      {
+        id: "40006",
+        name: "商品标题商品标题商品标题5",
+        price: "205.00",
+        picture: "./uploads/clothes_goods_5.jpg",
+      },
+      {
+        id: "40007",
+        name: "商品标题商品标题商品标题7",
+        price: "320.00",
+        picture: "./uploads/clothes_goods_6.jpg",
+      },
+    ];
+    //渲染模块
+    function render(arr) {
+      let str = "";
+      arr.forEach(function (item) {
+        const { name, price, picture } = item;
+        str += `
+        <div class="item">
+          <img src=${picture} alt="" />
+          <p class="title">${name}</p>
+          <p class="price">${price}</p>
+        </div>
+        `;
+      });
+      const list = document.querySelector(".list");
+      list.innerHTML = str;
+    }
+    render(goodsList);
+    //筛选模块
+    document.querySelector(".filter").addEventListener("click", (e) => {
+      const { tagName, dataset } = e.target;
+      if (tagName === "A") {
+        let arrGoods = goodsList;
+        if (dataset.index === "1") {
+          arrGoods = goodsList.filter(
+            (item) => item.price > 0 && item.price <= 100
+          );
+        } else if (dataset.index === "2") {
+          arrGoods = goodsList.filter(
+            (item) => item.price >= 100 && item.price <= 300
+          );
+        } else if (dataset.index === "3") {
+          arrGoods = goodsList.filter((item) => item.price >= 300);
+        }
+        render(arrGoods);
+      }
+    });
+  </script>
+</html>
